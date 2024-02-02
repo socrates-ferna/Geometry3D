@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 """Point Module"""
+from typing import Self
+import numpy as np
+import trimesh.transformations as transformations
 from ..utils.util import unify_types
 import math
 from ..utils.logger import get_main_logger
@@ -36,6 +39,7 @@ class Point(object):
             raise TypeError("Point() takes one or three arguments, not {}"
                     .format(len(args)))
         self.x, self.y, self.z = unify_types(coords)
+        self.coords = (self.x, self.y, self.z)
         get_main_logger().debug('Create %s' %(self.__repr__(),))
 
 
@@ -68,12 +72,15 @@ class Point(object):
 
     def __getitem__(self, item):
         """return the i element of a Point"""
-        return (self.x, self.y, self.z)[item]
+        return self.coords[item]
 
     def __setitem__(self, item, value):
         """set the i element of a Point"""
         setattr(self, "xyz"[item], value)
     
+    def __array__(self):
+        """return the array of a Point"""
+        return np.array([self.x, self.y, self.z])
 
     def pv(self):
         """Return the position vector of the point."""
@@ -88,7 +95,18 @@ class Point(object):
             return Point(self.pv())
         else:
             raise NotImplementedError("The second parameter for move function must be Vector")
-    
+        
+    def rotate(self, angle: float, axis: Vector, point: Self = None):
+        """Rotate around axis by angle (in radians) using trimesh transformations module"""
+        if not isinstance(axis,(Vector,list,tuple,np.ndarray)):
+            raise NotImplementedError("The first parameter for rotate function must be Vector")
+        # if point is None:
+        #     point = Point.origin() # unnecesary because the function already handles the origin case through None  kwarg
+        R = transformations.rotation_matrix(angle,axis.normalized(),point)
+        v = transformations.transform_points(self,R) # could use np.dot here but not sure if I need to use all 4 cols of R
+        self.x, self.y, self.z = v[0],v[1],v[2]
+        return Point(v[0],v[1],v[2]) # this return respects the spirit of the rest of methods, but I think it should return None
+
     def distance(self,other):
         """Return the distance between self and other"""
         return math.sqrt((self.x -other.x) ** 2 + (self.y -other.y) ** 2 + (self.z -other.z) ** 2)

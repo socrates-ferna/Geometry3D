@@ -5,6 +5,13 @@
 Geometry3D is a simple python computational geographics library written in python.
 This library focuses on the functions and lacks efficiency which might be improved in future version.
 
+## About this fork
+
+The only intended modifications are
+- Add numpy interfacing support for vectors and points
+- Add rotation capabilities to vectors and points (could extend to the rest of the package if I ever have time) using the transformations module from trimesh package
+
+This adds two requirements to the package: numpy and trimesh.
 
 ## Core Features
 - Basic 3D Geometries: Point, Line, Plane, Segment, Convex Polygon and Convex Polyhedron.
@@ -28,7 +35,8 @@ Some of the code comes from [sgl](https://github.com/Kingdread/sgl) whose author
 ## Requirements
 
 * [Python](http://www.python.org) 3 
-* No additional third-party library is required, it's written in pure python and standard library. 
+* numpy
+* trimesh
 * Matplotlib is needed if you want to use the renderer.
 
 ## Documentation
