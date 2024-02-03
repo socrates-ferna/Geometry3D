@@ -39,9 +39,8 @@ class Point(object):
             raise TypeError("Point() takes one or three arguments, not {}"
                     .format(len(args)))
         self.x, self.y, self.z = unify_types(coords)
-        self.coords = (self.x, self.y, self.z)
+        self.coords = [self.x, self.y, self.z]
         get_main_logger().debug('Create %s' %(self.__repr__(),))
-
 
     def __repr__(self):
         return "Point({}, {}, {})".format(
@@ -77,33 +76,38 @@ class Point(object):
     def __setitem__(self, item, value):
         """set the i element of a Point"""
         setattr(self, "xyz"[item], value)
+        self.coords[item] = value
     
-    def __array__(self):
+    def __array__(self,dtype=None):
         """return the array of a Point"""
-        return np.array([self.x, self.y, self.z])
+        return np.array([self.x, self.y, self.z],dtype=dtype)
 
+    def __ndarray__(self,dtype=None,n=2):
+        """return the n-dimensional array of a Point"""
+        return self.__array__(dtype=dtype)[:,*[np.newaxis]*(n-1)].T
+
+    def T(self):
+        """Column vector form of the point"""
+        return np.array([[self.x, self.y, self.z]]).T
     def pv(self):
         """Return the position vector of the point."""
         return Vector(self.x, self.y, self.z)
 
     def move(self, v):
         """Return the point that you get when you move self by vector v, self is also moved"""
-        if isinstance(v,Vector):
-            self.x += v[0]
-            self.y += v[1]
-            self.z += v[2]
-            return Point(self.pv())
-        else:
-            raise NotImplementedError("The second parameter for move function must be Vector")
-        
+        v = Vector(v) # the original author enforced moving with a vector, this respects the intention
+        self[0] += v[0]
+        self[1] += v[1]
+        self[2] += v[2]
+        return Point(self.coords)
+
     def rotate(self, angle: float, axis: Vector, point: Self = None):
         """Rotate around axis by angle (in radians) using trimesh transformations module"""
         if not isinstance(axis,(Vector,list,tuple,np.ndarray)):
             raise NotImplementedError("The first parameter for rotate function must be Vector")
-        # if point is None:
-        #     point = Point.origin() # unnecesary because the function already handles the origin case through None  kwarg
+
         R = transformations.rotation_matrix(angle,axis.normalized(),point)
-        v = transformations.transform_points(self,R) # could use np.dot here but not sure if I need to use all 4 cols of R
+        v = np.dot(R,np.array([self.coords]).T).T[:,:3] # could use np.dot here but not sure if I need to use all 4 cols of R
         self.x, self.y, self.z = v[0],v[1],v[2]
         return Point(v[0],v[1],v[2]) # this return respects the spirit of the rest of methods, but I think it should return None
 

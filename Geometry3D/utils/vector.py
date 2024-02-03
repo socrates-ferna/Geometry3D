@@ -95,8 +95,8 @@ class Vector(object):
     def __setitem__(self, item, value):
         self._v[item] = value
     
-    def __array__(self):
-        return np.array(self._v)
+    def __array__(self,dtype=None):
+        return np.array(self._v,dtype=dtype)
     
     def cross(self, other):
         r"""Calculates the cross product of two vectors, defined as
