@@ -69,6 +69,9 @@ class Point(object):
         else:
             return False
 
+    def __sub__(self, other):
+        return [x-y for x, y in zip(self, other)]
+    
     def __getitem__(self, item):
         """return the i element of a Point"""
         return self.coords[item]
@@ -114,7 +117,9 @@ class Point(object):
     def distance(self,other):
         """Return the distance between self and other"""
         return math.sqrt((self.x -other.x) ** 2 + (self.y -other.y) ** 2 + (self.z -other.z) ** 2)
-
+    def vdistance(self,other):
+        """Return the distance between self and other"""
+        return Vector(self,other,anchor=self)
 origin = Point.origin
 
 __all__ = ("Point","origin")

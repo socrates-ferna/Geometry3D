@@ -2,6 +2,9 @@
 """Vector Module""" 
 import math
 import numpy as np
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from Geometry3D import Point
 from .util import unify_types
 from .constant import get_eps,get_sig_figures
 
@@ -27,7 +30,7 @@ class Vector(object):
         """Returns the unit vector (0 | 0 | 1)"""
         return cls(0, 0, 1)
 
-    def __init__(self, *args):
+    def __init__(self, *args, anchor=None):
         """Vector(x, y, z)
         Vector([x, y, z]):
         A vector with coordinates (x | y | z)
@@ -53,7 +56,7 @@ class Vector(object):
             raise TypeError("Vector() takes one, two or three parameters, "
                             "not {}".format(len(args)))
         self._v = unify_types(self._v)
-
+        self.anchor = Point(anchor) if anchor is not None else Point.origin()
 
     def __hash__(self):
         """return the hash of a vector"""
@@ -73,9 +76,13 @@ class Vector(object):
         return abs(self._v[0] - other._v[0]) < get_eps() and abs(self._v[1] - other._v[1]) < get_eps() and abs(self._v[2] - other._v[2]) < get_eps()
 
     def __add__(self, other):
+        if not isinstance(other, Vector):
+            raise TypeError("Can only add a Vector to another Vector")
         return Vector(x+y for x, y in zip(self, other))
     
     def __sub__(self, other):
+        if not isinstance(other, Vector): # TODO: should support other iterables of length 3
+            raise TypeError("Can only subtract a Vector from another Vector")
         return Vector([x-y for x, y in zip(self, other)])
 
     def __mul__(self, other):

@@ -35,7 +35,8 @@ class Segment(GeoBody):
             self.end_point = Point(a.pv() + b)
         else:
             raise ValueError('Cannot create segment with type:%s and %s' % (type(a),type(b)))
-
+        self.vector = Vector(self.start_point,self.end_point)
+    
     def __eq__(self,other):
         return ((self.start_point == other.start_point and self.end_point == other.end_point) or 
         (self.end_point == other.start_point and self.start_point == other.end_point))
