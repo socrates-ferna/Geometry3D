@@ -105,13 +105,17 @@ class Point(object):
         return Point(self.coords)
 
     def rotate(self, angle: float, axis: Vector, point: Self = None):
-        """Rotate around axis by angle (in radians) using trimesh transformations module"""
+        """
+        Rotate around axis by angle (in radians) using
+        trimesh transformations module
+        """
         if not isinstance(axis,(Vector,list,tuple,np.ndarray)):
             raise NotImplementedError("The first parameter for rotate function must be Vector")
 
         R = transformations.rotation_matrix(angle,axis.normalized(),point)
         v = np.dot(R,np.array([self.coords]).T).T[:,:3] # could use np.dot here but not sure if I need to use all 4 cols of R
         self.x, self.y, self.z = v[0],v[1],v[2]
+        self.coords = [self.x, self.y, self.z] # coords requires update
         return Point(v[0],v[1],v[2]) # this return respects the spirit of the rest of methods, but I think it should return None
 
     def distance(self,other):

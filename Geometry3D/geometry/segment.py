@@ -64,6 +64,13 @@ class Segment(GeoBody):
             get_main_logger().warning("Calling type {} in type {} which is always False".format(type(other),type(self)))
             return False
 
+    def update(self, a: Point, b: Point):
+        """Update the segment with two points"""
+        self.start_point = a
+        self.end_point = b
+        self.line = Line(a,b)
+        self.vector = Vector(a,b)
+
     def in_(self,other):
         """other can be plane or line"""
         if isinstance(other,Line):
@@ -110,5 +117,13 @@ class Segment(GeoBody):
     def length(self):
         """retutn the length of the segment"""
         return self.start_point.distance(self.end_point)
+    
+    def rotate(self,angle,center = None, axis = None):
+        """Return the Segment that you get when you rotate self by angle around axis with center, self is also rotated
+        """
+        self.start_point.rotate(angle,axis,center)
+        self.end_point.rotate(angle,axis,center)
+        self.update(self.start_point,self.end_point)
+        return Segment(self.start_point,self.end_point)
 
 __all__ = ("Segment",)
