@@ -2,9 +2,6 @@
 """Vector Module""" 
 import math
 import numpy as np
-from typing import TYPE_CHECKING
-if TYPE_CHECKING:
-    from Geometry3D import Point
 from .util import unify_types
 from .constant import get_eps,get_sig_figures
 
@@ -30,7 +27,7 @@ class Vector(object):
         """Returns the unit vector (0 | 0 | 1)"""
         return cls(0, 0, 1)
 
-    def __init__(self, *args, anchor=None):
+    def __init__(self, *args):
         """Vector(x, y, z)
         Vector([x, y, z]):
         A vector with coordinates (x | y | z)
@@ -56,7 +53,7 @@ class Vector(object):
             raise TypeError("Vector() takes one, two or three parameters, "
                             "not {}".format(len(args)))
         self._v = unify_types(self._v)
-        self.anchor = Point(anchor) if anchor is not None else Point.origin()
+        #self.anchor = Point(anchor) if anchor is not None else Point.origin()
 
     def __hash__(self):
         """return the hash of a vector"""
@@ -92,6 +89,9 @@ class Vector(object):
 
     def __rmul__(self, other):
         return self * other
+    
+    def __truediv__(self, other):
+        return Vector([x/other for x in self._v])
     
     def __neg__(self):
         return self * -1

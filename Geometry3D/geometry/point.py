@@ -123,7 +123,14 @@ class Point(object):
         return math.sqrt((self.x -other.x) ** 2 + (self.y -other.y) ** 2 + (self.z -other.z) ** 2)
     def vdistance(self,other):
         """Return the distance between self and other"""
-        return Vector(self,other,anchor=self)
+        return AnchoredVector(self,other,anchor=self)
+
+
+class AnchoredVector(Vector):
+    def __init__(self, *args, anchor: Point = None):
+        super().__init__(*args)
+        self.anchor = anchor if anchor is not None else Point.origin()
+
 origin = Point.origin
 
-__all__ = ("Point","origin")
+__all__ = ("Point","AnchoredVector","origin")

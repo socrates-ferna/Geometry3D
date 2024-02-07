@@ -126,4 +126,15 @@ class Segment(GeoBody):
         self.update(self.start_point,self.end_point)
         return Segment(self.start_point,self.end_point)
 
+    def point_on_unitary_length(self, t):
+        """Return the point on the segment at t, where t is in [0,1]"""
+        return Point(self.start_point.pv() + self.vector * t)
+
+    def divide(self,n):
+        """Divide the segment into n equal parts"""
+        v = Vector(self.start_point,self.end_point)
+        points = [Point(self.start_point.pv() + v * (i / n)) for i in range(n+1)]
+        segments = [Segment(points[i],points[i+1]) for i in range(n)]
+        return segments
+
 __all__ = ("Segment",)
