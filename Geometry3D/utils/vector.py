@@ -2,6 +2,7 @@
 """Vector Module""" 
 import math
 import numpy as np
+#import Geometry3D.geometry.point as point
 from .util import unify_types
 from .constant import get_eps,get_sig_figures
 
@@ -105,6 +106,12 @@ class Vector(object):
     def __array__(self,dtype=None):
         return np.array(self._v,dtype=dtype)
     
+    def __ndarray__(self,dtype=None,n=2):
+        return self.__array__(dtype=dtype)[:,*[np.newaxis]*(n-1)].T
+
+    def T(self):
+        return self.__ndarray__().T
+    
     def cross(self, other):
         r"""Calculates the cross product of two vectors, defined as
         _   _   / x2y3 - x3y2 \
@@ -149,8 +156,18 @@ class Vector(object):
         pointing in the same direction but with length 1.
         """
         # Division is not defined, so we have to multiply by 1/|v|
-        return float(1 / self.length()) * self
+        return self / self.length()
     unit = normalized
+
+    def rotate(self, angle, axis, point = None):
+        """Rotate the vector around the given axis by the given angle (in radians)
+        If no point is passed, the rotation is done around the origin.
+        If a point is passed, the rotation is done around that point, but in this class the rotation of the anchor point is not reflected in the vector.
+        """
+        
+        #rot = point.Point(self._v).rotate(angle, axis, point)
+
+        pass
 
 x_unit_vector = Vector.x_unit_vector
 y_unit_vector = Vector.y_unit_vector

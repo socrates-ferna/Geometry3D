@@ -98,7 +98,7 @@ class Point(object):
     
     def __array__(self,dtype=None):
         """return the array of a Point"""
-        return np.array([self.x, self.y, self.z],dtype=dtype)
+        return np.array(self.coords,dtype=dtype)
 
     def __ndarray__(self,dtype=None,n=2):
         """return the n-dimensional array of a Point"""
@@ -131,6 +131,7 @@ class Point(object):
     def T(self):
         """Column vector form of the point"""
         return np.array([[self.x, self.y, self.z]]).T
+    
     def pv(self):
         """Return the position vector of the point."""
         return Vector(self.x, self.y, self.z)
@@ -160,6 +161,7 @@ class Point(object):
     def distance(self,other):
         """Return the distance between self and other"""
         return math.sqrt((self.x -other.x) ** 2 + (self.y -other.y) ** 2 + (self.z -other.z) ** 2)
+    
     def vdistance(self,other):
         """Return the distance between self and other"""
         return AnchoredVector(self,other,anchor=self)

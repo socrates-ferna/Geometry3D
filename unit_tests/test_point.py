@@ -4,7 +4,7 @@ import unittest
 import numpy as np
 from trimesh import transformations
 from itertools import combinations
-from Geometry3D import Point, Vector
+from Geometry3D import Point, Vector, AnchoredVector
 
 
 class PointTest(unittest.TestCase):
@@ -161,6 +161,16 @@ class PointTest(unittest.TestCase):
             Vector(p.coords)
         )
 
+
+class AnchoredVectorTest(unittest.TestCase):
+    def test_init(self):
+        p = Point(1, 2, 3)
+        v = AnchoredVector(1,1,1,anchor=p)
+        self.assertEqual(
+            v.anchor,
+            p,
+        )
+
 if __name__ == "__main__":
     unittest.main()
-    
+
