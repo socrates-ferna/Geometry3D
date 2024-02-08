@@ -56,12 +56,14 @@ class PointTest(unittest.TestCase):
     def test_move(self):
         p = Point(1, 2, 3)
         v = np.array([1, 2, 3])
+        p.move(v)
         self.assertEqual(
-            p.move(v),
+            p,
             Point(2, 4, 6),
         )
+        p.move(-1*v)
         self.assertEqual(
-            p.move(-1*v),
+            p,
             Point(1, 2, 3),
         )
     def test_rotate(self):
@@ -70,22 +72,32 @@ class PointTest(unittest.TestCase):
         axis = Vector(1, 0, 0)
         refp = np.array([[1,1,1]])
         angle = np.pi/2
-        rot_mat = transformations.rotation_matrix(np.pi/2, axis,point=orig)
+        rot_mat = transformations.rotation_matrix(angle, axis,point=orig)
         rotated = transformations.transform_points(p.__ndarray__(n=2), rot_mat)
+        p.rotate(angle, axis, point=orig)
         ref_rotated = transformations.transform_points(refp, rot_mat)
         self.assertEqual(
             Point(np.squeeze(rotated)),
             Point(np.squeeze(ref_rotated)),
         )
+        self.assertEqual(
+            p,
+            Point(np.squeeze(ref_rotated))
+        )
         neworig = Point(1, 2, 3)
         p = Point(1, 1, 1)
         refp = np.array([[1,1,1]])
-        rot_mat = transformations.rotation_matrix(np.pi/2, axis,point=neworig)
+        rot_mat = transformations.rotation_matrix(angle, axis,point=neworig)
         rotated = transformations.transform_points(p.__ndarray__(n=2), rot_mat)
+        p.rotate(angle,axis,point=neworig)
         ref_rotated = transformations.transform_points(refp, rot_mat)
         self.assertEqual(
             Point(np.squeeze(rotated)),
             Point(np.squeeze(ref_rotated)),
+        )
+        self.assertEqual(
+            p,
+            Point(np.squeeze(ref_rotated))
         )
     def test_distance(self):
         p1 = Point(1, 1, 1)

@@ -2,7 +2,8 @@
 """Vector Module""" 
 import math
 import numpy as np
-#import Geometry3D.geometry.point as point
+from typing import Self
+from trimesh import transformations
 from .util import unify_types
 from .constant import get_eps,get_sig_figures
 
@@ -159,15 +160,17 @@ class Vector(object):
         return self / self.length()
     unit = normalized
 
-    def rotate(self, angle, axis, point = None):
+    def rotate(self, angle, axis: Self):
         """Rotate the vector around the given axis by the given angle (in radians)
-        If no point is passed, the rotation is done around the origin.
-        If a point is passed, the rotation is done around that point, but in this class the rotation of the anchor point is not reflected in the vector.
+        The rotation is done around the origin, as there is no anchor to keep track of,
+        so the vector remains the same even if the point was not the origin. See AnchoredVector class
         """
-        
-        #rot = point.Point(self._v).rotate(angle, axis, point)
+        if not isinstance(axis,(Vector,list,tuple,np.ndarray)):
+            raise NotImplementedError("The first parameter for rotate function must be Vector-like")
 
-        pass
+        R = transformations.rotation_matrix(angle,axis.normalized())
+        self._v = np.dot(R,np.array([self._v+[1]]).T).T[:,:3].squeeze().tolist() # could use np.dot here but not sure if I need to use all 4 cols of R
+        return
 
 x_unit_vector = Vector.x_unit_vector
 y_unit_vector = Vector.y_unit_vector
