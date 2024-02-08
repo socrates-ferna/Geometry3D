@@ -64,7 +64,6 @@ class PointTest(unittest.TestCase):
             p.move(-1*v),
             Point(1, 2, 3),
         )
-    
     def test_rotate(self):
         p = Point(1, 1, 1)
         orig = Point.origin()
@@ -88,7 +87,6 @@ class PointTest(unittest.TestCase):
             Point(np.squeeze(rotated)),
             Point(np.squeeze(ref_rotated)),
         )
-    
     def test_distance(self):
         p1 = Point(1, 1, 1)
         p2 = Point(1, 2, 3)
@@ -96,7 +94,6 @@ class PointTest(unittest.TestCase):
             p1.distance(p2),
             sqrt(1 + 4),
         )
-
     def test_array(self):
         self.assertTrue(
             np.allclose(
@@ -117,7 +114,6 @@ class PointTest(unittest.TestCase):
                 np.array([[1, 2, 3]]),
             )
         )
-
     def test_T(self):
         p = Point(1, 2, 3)
         self.assertTrue(
@@ -130,3 +126,41 @@ class PointTest(unittest.TestCase):
             p.T().shape,
             (3, 1),
         )
+    def test_coords(self):
+
+        p = Point(1, 2, 3)
+        self.assertTrue(
+            np.allclose(
+                p.coords,
+                np.array([1, 2, 3]),
+            )
+        )
+        self.assertAlmostEqual(p.x, 1)
+        self.assertAlmostEqual(p.y, 2)
+        self.assertAlmostEqual(p.z, 3)
+        p.x = 4
+        p.y = 5
+        p.z = 6
+        self.assertAlmostEqual(p.x, 4)
+        self.assertAlmostEqual(p.y, 5)
+        self.assertAlmostEqual(p.z, 6)
+        self.assertTrue(
+            np.allclose(
+                p.coords,
+                np.array([4, 5, 6]),
+            )
+        )
+    def test_pv(self):
+        p = Point(1, 2, 3)
+        self.assertEqual(
+            p.pv(),
+            Vector(1, 2, 3),
+        )
+        self.assertEqual(
+            p.pv(),
+            Vector(p.coords)
+        )
+
+if __name__ == "__main__":
+    unittest.main()
+    

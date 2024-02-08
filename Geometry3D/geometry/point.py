@@ -30,6 +30,20 @@ class Point(object):
         return cls(0, 0, 0)
     
     def __init__(self, *args):
+        """
+        Initializes a Point object.
+
+        Args:
+            *args: Variable number of arguments. 
+                - If a single argument is provided, it is treated as a sequence of coordinates.
+                - If three arguments are provided, they are treated as individual x, y, and z coordinates.
+
+        Raises:
+            TypeError: If the number of arguments is not 1 or 3.
+
+        Returns:
+            None
+        """
         if len(args) == 1:
             # Initialisation by Vector is also handled by this
             coords = args[0]
@@ -38,8 +52,9 @@ class Point(object):
         else:
             raise TypeError("Point() takes one or three arguments, not {}"
                     .format(len(args)))
+        self.coords = [None, None, None]
         self.x, self.y, self.z = unify_types(coords)
-        self.coords = [self.x, self.y, self.z]
+        #self.coords = [self.x, self.y, self.z]
         get_main_logger().debug('Create %s' %(self.__repr__(),))
 
     def __repr__(self):
@@ -88,6 +103,30 @@ class Point(object):
     def __ndarray__(self,dtype=None,n=2):
         """return the n-dimensional array of a Point"""
         return self.__array__(dtype=dtype)[:,*[np.newaxis]*(n-1)].T
+
+    @property
+    def x(self):
+        return self.coords[0]
+    
+    @x.setter
+    def x(self, value):
+        self.coords[0] = value
+    
+    @property
+    def y(self):
+        return self.coords[1]
+    
+    @y.setter
+    def y(self, value):
+        self.coords[1] = value
+    
+    @property
+    def z(self):
+        return self.coords[2]
+    
+    @z.setter
+    def z(self, value):
+        self.coords[2] = value
 
     def T(self):
         """Column vector form of the point"""
