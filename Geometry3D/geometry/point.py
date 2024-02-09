@@ -142,7 +142,7 @@ class Point(object):
         self[0] += v[0]
         self[1] += v[1]
         self[2] += v[2]
-        return
+        return Point(self.x, self.y, self.z)
 
     def rotate(self, angle: float, axis: Vector, point: Self = None):
         """
@@ -167,11 +167,6 @@ class Point(object):
         """Return the distance between self and other"""
         return AnchoredVector(self,other,anchor=self)
 
-
-class AnchoredVector(Vector):
-    def __init__(self, *args, anchor: Point = None):
-        super().__init__(*args)
-        self.anchor = anchor if anchor is not None else Point.origin()
 
 origin = Point.origin
 

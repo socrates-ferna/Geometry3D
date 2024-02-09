@@ -116,8 +116,10 @@ class VectorTest(unittest.TestCase):
         self.assertAlmostEqual(abs(Vector(1, 1, 1).normalized()), 1)
 
     def test_rotate(self):
+        v = Vector(1, 0, 0)
+        v.rotate(math.pi / 2, Vector(0, 0, 1))
         self.assertEqual(
-            Vector(1, 0, 0).rotate(math.pi / 2, Vector(0, 0, 1)),
+            v,
             Vector(0, 1, 0),
         )
 

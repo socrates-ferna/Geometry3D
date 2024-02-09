@@ -72,7 +72,7 @@ class Vector(object):
         return "Vector({}, {}, {})".format(*self._v)
     
     def __eq__(self, other):
-        return abs(self._v[0] - other._v[0]) < get_eps() and abs(self._v[1] - other._v[1]) < get_eps() and abs(self._v[2] - other._v[2]) < get_eps()
+        return np.allclose(self._v, other._v)
 
     def __add__(self, other):
         if not isinstance(other, Vector):
