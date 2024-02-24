@@ -163,11 +163,11 @@ class Point(object):
         """Return the distance between self and other"""
         return math.sqrt((self.x -other.x) ** 2 + (self.y -other.y) ** 2 + (self.z -other.z) ** 2)
     
-    def vdistance(self,other):
-        """Return the distance between self and other"""
-        return AnchoredVector(self,other,anchor=self)
+    # def vdistance(self,other):
+    #     """Return the distance between self and other"""
+    #     return AnchoredVector(self,other,anchor=self)
 
 
 origin = Point.origin
 
-__all__ = ("Point","AnchoredVector","origin")
+__all__ = ("Point","origin")
